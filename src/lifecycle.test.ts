@@ -1,11 +1,12 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from "vitest"
 import type { Doclight } from "@doclight/core"
 
 type ProcessListener = (...args: unknown[]) => void
 
 describe("lifecycle hooks", () => {
   const listeners: Record<string, ProcessListener[]> = {}
-  let killSpy: ReturnType<typeof vi.spyOn>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let killSpy: MockInstance<any>
 
   beforeEach(() => {
     vi.resetModules()
@@ -14,11 +15,11 @@ describe("lifecycle hooks", () => {
     }
 
     vi.spyOn(process, "on").mockImplementation((event, handler) => {
-      listeners[event]?.push(handler as ProcessListener)
+      listeners[event as string]?.push(handler as ProcessListener)
       return process
     })
     vi.spyOn(process, "once").mockImplementation((event, handler) => {
-      listeners[event]?.push(handler as ProcessListener)
+      listeners[event as string]?.push(handler as ProcessListener)
       return process
     })
     killSpy = vi.spyOn(process, "kill").mockImplementation(() => true)

@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest"
 
 const docPath = join(
   dirname(fileURLToPath(import.meta.url)),
-  "../../../docs/agents/install-node-sdk.md",
+  "../docs/agents/install-node-sdk.md",
 )
 
 function normalizeCode(code: string): string {
