@@ -12,7 +12,11 @@
     "resolveJsonModule": true,
     "types": ["node"],
     "noEmit": true,
-    "rootDir": "src"
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@doclight/node": ["./src/index.ts"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
