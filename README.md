@@ -94,6 +94,11 @@ const client = new Doclight({
 
 All `@doclight/core` types and exports are re-exported from this package.
 
+## Source and issues
+
+- Source: https://github.com/doclight-lab/sdk-node
+- Issues: https://github.com/doclight-lab/sdk-node/issues
+
 ---
 
 For MCP server instrumentation, see [@doclight/mcp](https://www.npmjs.com/package/@doclight/mcp).
