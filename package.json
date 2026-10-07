@@ -14,9 +14,9 @@
   "homepage": "https://doclight.app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/doclight/sdk-node"
+    "url": "https://github.com/doclight-lab/sdk-node"
   },
-  "bugs": "https://github.com/doclight/sdk-node/issues",
+  "bugs": "https://github.com/doclight-lab/sdk-node/issues",
   "publishConfig": {
     "access": "public"
   },
