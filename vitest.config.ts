@@ -1,11 +1,13 @@
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { defineConfig } from "vitest/config"
+import { configDefaults, defineConfig } from "vitest/config"
 
 const srcDir = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   test: {
+    // .github/scripts holds node:test controllers, not vitest suites.
+    exclude: [...configDefaults.exclude, ".github/**"],
     globals: false,
     environment: "node",
   },
