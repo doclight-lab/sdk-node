@@ -96,12 +96,10 @@ export class HttpTransport implements Transport {
   private async interpretSuccess(
     response: Response,
   ): Promise<TransportResult> {
-    let body = ""
-    try {
-      body = await response.text()
-    } catch {
-      return { ok: true }
-    }
+    // A body read that stalls, disconnects or hits the timeout rejects here
+    // and reaches send()'s catch as a retryable failure: the acknowledgement
+    // was never received, so the batch must not be counted as delivered.
+    const body = await response.text()
     if (body.length === 0) return { ok: true }
 
     let json: unknown

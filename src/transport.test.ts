@@ -33,6 +33,17 @@ describe("HttpTransport", () => {
     expect((await make(() => new Response("{nope", { status: 200 })).t.send(batch, { timeoutMs: 100 })).ok).toBe(true)
   })
 
+  it("treats a failed 2xx body read as a retryable failure, not delivery", async () => {
+    const res = () => {
+      const r = new Response("{}", { status: 200 })
+      vi.spyOn(r, "text").mockRejectedValue(new Error("stream aborted dl_secret"))
+      return r
+    }
+    const r = await make(res).t.send(batch, { timeoutMs: 100 })
+    expect(r).toMatchObject({ ok: false, retryable: true })
+    expect(JSON.stringify(r)).not.toContain("dl_secret")
+  })
+
   it("does not report rejected events as delivered", async () => {
     const { t } = make(
       () => new Response(JSON.stringify({ accepted: 1, rejected: 2 }), { status: 200 }),
