@@ -62,7 +62,8 @@ Headers:
 
 | HTTP outcome | Retryable |
 | --- | --- |
-| 2xx | — (success) |
+| 2xx, empty/unparseable body or `rejected: 0` | — (success) |
+| 2xx with `rejected > 0` | no (reported as a failed send, never as delivered) |
 | 408 Request Timeout | yes |
 | 429 Too Many Requests | yes |
 | 5xx | yes |
@@ -70,6 +71,13 @@ Headers:
 | Other 4xx (400, 401, 413, …) | no |
 
 Non-retryable 4xx means the payload or credentials will not fix themselves on retry.
+
+### Delivery limits
+
+- Retries, request timeout, queue size, drop policy and shutdown cap come from the `@doclight/core` flusher config; retries reuse the same batch, so event IDs are preserved. Delivery never throws into application code; failures are counted in `getStats()` and logged once without credentials.
+- `Retry-After` is parsed and capped at 30s, but `@doclight/core` 0.1.0's `TransportResult` cannot carry a retry delay, so it is only included in the failure reason; the flusher's own bounded backoff applies.
+- Partial acknowledgements (`accepted` and `rejected` both non-zero) are reported as a non-retryable failure of the whole batch because the core contract has no per-event result.
+- The backend's final endpoint, credential-bound brand and acknowledgement semantics are still being agreed (see sdk-core#4 and aeo-visibility#101); this package follows the contract in the installed `@doclight/core`.
 
 ## Lifecycle hooks
 
